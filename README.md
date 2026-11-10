@@ -53,3 +53,16 @@ This will start both the React frontend (on port 3000) and the Express backend (
 
 MIT
 
+
+## Frontier Pace (AI growth explorer)
+
+`ai-growth/index.html` is a standalone interactive page that charts how frontier AI models have grown, from GPT-1 (2018) to the latest 2026 releases. It covers OpenAI (ChatGPT), Anthropic (Claude), Google (Gemini), xAI (Grok), Meta (Llama), DeepSeek and Mistral.
+
+- Release timeline by lab, with a detail card and keyboard stepping (`←` / `→`)
+- Training compute and context window on log scales, with fitted growth rates
+- GPQA Diamond and SWE-bench Verified scores with the best-score-so-far line
+- Releases per year, stacked by lab
+- A sortable, searchable table of every model
+- Light, dark and system themes (press `T` to cycle), styled after Linear
+
+It has no build step: open the file in a browser, or run `npm run dev` and visit http://localhost:3000/ai-growth/. All data lives in the `RAW` array inside the page's script. Releases marked "reported" come from press coverage and still need checking against each lab's announcement.
