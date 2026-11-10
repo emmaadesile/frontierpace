@@ -1,0 +1,1779 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Frontier Pace</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="How fast frontier AI models from OpenAI, Anthropic, Google, xAI, Meta, DeepSeek and Mistral have grown, from GPT-1 in 2018 to the latest releases.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: Linear-style product page. Sticky translucent header, gradient-text hero,
+   one filter row, then a stack of hairline-bordered panels (timeline + detail,
+   compute | context, benchmarks, cadence, model table). Lab identity = color + shape. */
+:root {
+  color-scheme: light;
+  --bg: #fcfcfd;
+  --bg-panel: #ffffff;
+  --bg-raised: #f4f5f8;
+  --bg-hover: #eceef3;
+  --line: #e4e5eb;
+  --line-strong: #cfd2da;
+  --grid: #eef0f4;
+  --fg: #0f1013;
+  --fg-2: #50535e;
+  --fg-3: #7d808c;
+  --accent: #5e6ad2;
+  --accent-text: #4c58c4;
+  --accent-soft: rgba(94, 106, 210, 0.12);
+  --on-accent: #ffffff;
+  --glow: rgba(94, 106, 210, 0.16);
+  --shadow: 0 1px 2px rgba(15, 16, 19, 0.04), 0 8px 24px rgba(15, 16, 19, 0.06);
+  --good: #1a7f4b;
+
+  /* Lab series colors: validated categorical slots (light surface) */
+  --lab-google: #2a78d6;    /* slot 1 */
+  --lab-anthropic: #eb6834; /* slot 2 */
+  --lab-openai: #1baf7a;    /* slot 3 */
+  --lab-mistral: #eda100;   /* slot 4 */
+  --lab-meta: #e87ba4;      /* slot 5 */
+  --lab-deepseek: #008300;  /* slot 6 */
+  --lab-xai: #6250d6;       /* slot 7 */
+
+  --font-display: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #08090a;
+    --bg-panel: #0f1011;
+    --bg-raised: #151618;
+    --bg-hover: #1c1d20;
+    --line: #1f2023;
+    --line-strong: #2c2e33;
+    --grid: #17181b;
+    --fg: #f7f8f8;
+    --fg-2: #8a8f98;
+    --fg-3: #62666d;
+    --accent: #5e6ad2;
+    --accent-text: #828fff;
+    --accent-soft: rgba(113, 112, 255, 0.16);
+    --on-accent: #ffffff;
+    --glow: rgba(113, 112, 255, 0.14);
+    --shadow: 0 0 0 1px rgba(255, 255, 255, 0.02), 0 12px 32px rgba(0, 0, 0, 0.4);
+    --good: #4cc38a;
+    --lab-google: #3987e5;
+    --lab-anthropic: #d95926;
+    --lab-openai: #199e70;
+    --lab-mistral: #c98500;
+    --lab-meta: #d55181;
+    --lab-deepseek: #008300;
+    --lab-xai: #9085e9;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #08090a;
+  --bg-panel: #0f1011;
+  --bg-raised: #151618;
+  --bg-hover: #1c1d20;
+  --line: #1f2023;
+  --line-strong: #2c2e33;
+  --grid: #17181b;
+  --fg: #f7f8f8;
+  --fg-2: #8a8f98;
+  --fg-3: #62666d;
+  --accent: #5e6ad2;
+  --accent-text: #828fff;
+  --accent-soft: rgba(113, 112, 255, 0.16);
+  --on-accent: #ffffff;
+  --glow: rgba(113, 112, 255, 0.14);
+  --shadow: 0 0 0 1px rgba(255, 255, 255, 0.02), 0 12px 32px rgba(0, 0, 0, 0.4);
+  --good: #4cc38a;
+  --lab-google: #3987e5;
+  --lab-anthropic: #d95926;
+  --lab-openai: #199e70;
+  --lab-mistral: #c98500;
+  --lab-meta: #d55181;
+  --lab-deepseek: #008300;
+  --lab-xai: #9085e9;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 72px; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "cv01", "ss03";
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 30;
+  background: var(--bg);
+}
+[hidden] { display: none !important; }
+a { color: var(--accent-text); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.num { font-variant-numeric: tabular-nums; }
+
+.wrap {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 720px) {
+  .wrap {
+    padding-left: max(32px, env(safe-area-inset-left, 0px));
+    padding-right: max(32px, env(safe-area-inset-right, 0px));
+  }
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 60px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--fg);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.brand:hover { text-decoration: none; }
+.brand svg { flex: none; }
+.nav {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  min-width: 0;
+  flex: 1;
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav a {
+  color: var(--fg-2);
+  font-size: 13.5px;
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+  white-space: nowrap;
+}
+.nav a:hover { color: var(--fg); background: var(--bg-hover); text-decoration: none; }
+@media (max-width: 860px) { .nav { display: none; } .header-spacer { flex: 1; } }
+@media (min-width: 861px) { .header-spacer { display: none; } }
+
+.seg {
+  display: inline-flex;
+  padding: 2px;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg-raised);
+}
+.seg button {
+  border: 0;
+  background: transparent;
+  color: var(--fg-2);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.seg button:hover { color: var(--fg); }
+.seg button[aria-pressed="true"] {
+  background: var(--bg-panel);
+  color: var(--fg);
+  box-shadow: 0 0 0 1px var(--line-strong), 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+.seg svg { width: 14px; height: 14px; }
+@media (max-width: 480px) { .theme-seg .lbl { display: none; } }
+
+kbd {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1;
+  color: var(--fg-2);
+  background: var(--bg-raised);
+  border: 1px solid var(--line-strong);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  padding-block: 72px 40px;
+  overflow: hidden;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -120px 0 auto;
+  height: 420px;
+  background: radial-gradient(ellipse 60% 55% at 50% 0%, var(--glow), transparent 70%);
+  pointer-events: none;
+}
+.hero .wrap { position: relative; }
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--fg-2);
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg-panel) 70%, transparent);
+  border-radius: 999px;
+  padding: 4px 12px 4px 6px;
+}
+.pill b {
+  font-weight: 500;
+  color: var(--on-accent);
+  background: var(--accent);
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 12px;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 7vw, 72px);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  font-weight: 560;
+  margin: 22px 0 18px;
+  max-width: 14ch;
+  text-wrap: balance;
+  background: linear-gradient(to right bottom, var(--fg) 35%, color-mix(in srgb, var(--fg) 42%, transparent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero p.lede {
+  font-size: clamp(16px, 2vw, 19px);
+  color: var(--fg-2);
+  max-width: 58ch;
+  margin: 0;
+  letter-spacing: -0.005em;
+}
+.hero p.lede strong { color: var(--fg); font-weight: 500; }
+
+.stats {
+  margin-top: 44px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--bg-panel);
+  overflow: hidden;
+}
+.stat {
+  padding: 20px 22px 22px;
+  border-left: 1px solid var(--line);
+  min-width: 0;
+}
+.stat:first-child { border-left: 0; }
+.stat .k {
+  font-size: 12px;
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+}
+.stat .v {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.4vw, 36px);
+  letter-spacing: -0.03em;
+  font-weight: 560;
+  line-height: 1.15;
+  margin-top: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.stat .v small { font-size: 0.5em; color: var(--fg-2); font-weight: 500; letter-spacing: -0.01em; margin-left: 4px; }
+.stat .d { font-size: 13px; color: var(--fg-2); margin-top: 6px; }
+@media (max-width: 900px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(3) { border-left: 0; }
+  .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
+}
+@media (max-width: 440px) {
+  .stats { grid-template-columns: minmax(0, 1fr); }
+  .stat { border-left: 0; }
+  .stat:nth-child(n+2) { border-top: 1px solid var(--line); }
+}
+
+/* ---------- Filter row ---------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding-block: 8px 20px;
+}
+.chips { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg);
+  border: 1px solid var(--line);
+  background: var(--bg-panel);
+  border-radius: 999px;
+  padding: 4px 11px 4px 8px;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, opacity 0.12s;
+}
+.chip:hover { background: var(--bg-hover); border-color: var(--line-strong); }
+.chip[aria-pressed="false"] { color: var(--fg-3); background: transparent; }
+.chip[aria-pressed="false"] svg { opacity: 0.35; }
+.chip svg { width: 12px; height: 12px; flex: none; }
+.chip.reset { color: var(--fg-2); padding: 4px 11px; }
+.filters .spacer { flex: 1; }
+.filters .hint { font-size: 12.5px; color: var(--fg-3); display: inline-flex; gap: 6px; align-items: center; }
+@media (max-width: 720px) { .filters .hint { display: none; } }
+
+/* ---------- Panels ---------- */
+main { padding-bottom: 40px; }
+section.block { padding-block: 28px; }
+.sec-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-bottom: 16px;
+}
+.sec-head h2 {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.6vw, 28px);
+  letter-spacing: -0.025em;
+  font-weight: 560;
+  line-height: 1.2;
+  margin: 0;
+  text-wrap: balance;
+}
+.sec-head p { margin: 6px 0 0; color: var(--fg-2); max-width: 62ch; font-size: 14.5px; }
+.eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent-text);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+.panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 16px;
+  padding: 16px 20px 0;
+}
+.panel-head h3 { margin: 0; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+.panel-head .sub { font-size: 13px; color: var(--fg-3); }
+.headline-num {
+  padding: 10px 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+.headline-num .big {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 560;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.headline-num .ctx { font-size: 13.5px; color: var(--fg-2); }
+.chart { position: relative; padding: 8px 8px 8px; min-width: 0; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.panel-foot {
+  border-top: 1px solid var(--line);
+  padding: 10px 20px;
+  font-size: 12.5px;
+  color: var(--fg-3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: center;
+}
+
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--fg-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend svg { width: 12px; height: 12px; flex: none; }
+.legend .ln { width: 16px; height: 2px; background: var(--fg-2); border-radius: 1px; }
+.legend .ln.dash { background: repeating-linear-gradient(90deg, var(--fg-2) 0 4px, transparent 4px 7px); }
+
+/* SVG chart text and marks */
+.ax text { fill: var(--fg-3); font-size: 11.5px; font-family: var(--font-body); font-variant-numeric: tabular-nums; }
+.ax line.grid { stroke: var(--grid); stroke-width: 1; }
+.ax line.base { stroke: var(--line-strong); stroke-width: 1; }
+.lane-label { fill: var(--fg); font-size: 13px; font-weight: 500; }
+.lane-sub { fill: var(--fg-3); font-size: 11.5px; }
+.ann line { stroke: var(--line-strong); stroke-dasharray: 3 3; }
+.ann text { fill: var(--fg-3); font-size: 11px; }
+.ann.today line { stroke: var(--accent); stroke-dasharray: none; opacity: 0.7; }
+.ann.today text { fill: var(--accent-text); font-weight: 500; }
+.mk { cursor: pointer; }
+.mk .shape { stroke: var(--bg-panel); stroke-width: 2; transition: transform 0.12s; }
+.mk.rep .shape { fill: var(--bg-panel) !important; stroke-width: 1.75; }
+.mk:hover .shape, .mk:focus-visible .shape { transform: scale(1.3); }
+.mk:focus-visible { outline: none; }
+.mk .ring { fill: none; stroke: var(--fg); stroke-width: 1.5; }
+.mk .hit { fill: transparent; }
+.dlabel {
+  fill: var(--fg);
+  font-size: 12px;
+  font-weight: 500;
+  paint-order: stroke;
+  stroke: var(--bg-panel);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.dlabel.muted { fill: var(--fg-2); font-weight: 400; }
+.trend { stroke: var(--fg-2); stroke-width: 1.5; stroke-dasharray: 5 4; fill: none; }
+.frontier { stroke: var(--fg-2); stroke-width: 2; fill: none; stroke-linejoin: round; }
+.ref line { stroke: var(--fg-3); stroke-dasharray: 2 4; }
+.ref text { fill: var(--fg-3); font-size: 11px; }
+.bar { cursor: default; }
+.bar:hover { filter: brightness(1.12); }
+.bar-total { fill: var(--fg); font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* Timeline + detail */
+.tl-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+}
+.tl-grid .chart { border-right: 1px solid var(--line); }
+@media (max-width: 960px) {
+  .tl-grid { grid-template-columns: minmax(0, 1fr); }
+  .tl-grid .chart { border-right: 0; border-bottom: 1px solid var(--line); }
+}
+.detail { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.detail .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.lab-tag { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--fg-2); font-weight: 500; }
+.lab-tag svg { width: 12px; height: 12px; }
+.status {
+  font-size: 11.5px;
+  font-weight: 500;
+  border-radius: 999px;
+  padding: 2px 8px;
+  border: 1px solid var(--line-strong);
+  color: var(--fg-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.status.ok { color: var(--good); border-color: color-mix(in srgb, var(--good) 40%, transparent); }
+.status svg { width: 11px; height: 11px; }
+.detail h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 560;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.detail .when { font-size: 13.5px; color: var(--fg-2); margin-top: 4px; }
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  margin: 0;
+}
+.facts div { background: var(--bg-raised); padding: 10px 12px; min-width: 0; }
+.facts dt { font-size: 11.5px; color: var(--fg-3); }
+.facts dd { margin: 2px 0 0; font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.facts dd.na { color: var(--fg-3); font-weight: 400; }
+.detail .note { font-size: 14px; color: var(--fg-2); margin: 0; }
+.stepper { display: flex; gap: 8px; margin-top: auto; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg-raised);
+  color: var(--fg);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.btn:hover { background: var(--bg-hover); border-color: var(--line-strong); }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn.primary { background: var(--accent); color: var(--on-accent); border-color: transparent; }
+.btn.primary:hover { filter: brightness(1.08); background: var(--accent); }
+.btn kbd { background: transparent; }
+.btn.primary kbd { color: var(--on-accent); border-color: rgba(255, 255, 255, 0.35); }
+
+.two-up { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .two-up { grid-template-columns: minmax(0, 1fr); } }
+
+/* Table */
+.tbl-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg-raised);
+  border-radius: var(--r-sm);
+  padding: 0 10px;
+  min-width: 0;
+  flex: 1 1 220px;
+  max-width: 360px;
+}
+.search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.search svg { width: 14px; height: 14px; color: var(--fg-3); flex: none; }
+.search input {
+  border: 0;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  font-size: 13.5px;
+  padding: 7px 0;
+  width: 100%;
+  min-width: 0;
+  outline: none;
+}
+.search input::placeholder { color: var(--fg-3); }
+.tbl-count { font-size: 12.5px; color: var(--fg-3); margin-left: auto; }
+.tbl-scroll { overflow-x: auto; }
+.tbl-more { border-top: 1px solid var(--line); padding: 12px 16px; display: flex; justify-content: center; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 760px; }
+thead th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--fg-3);
+  font-size: 12px;
+  padding: 0;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+thead th button {
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  padding: 10px 14px;
+  width: 100%;
+  text-align: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+thead th button:hover { color: var(--fg); }
+thead th[aria-sort] button { color: var(--fg); }
+th.r, td.r { text-align: right; }
+th.r button { justify-content: flex-end; }
+tbody td { padding: 9px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; font-variant-numeric: tabular-nums; }
+tbody tr { cursor: pointer; }
+tbody tr:hover td { background: var(--bg-hover); }
+tbody tr[aria-selected="true"] td { background: var(--accent-soft); }
+tbody tr:last-child td { border-bottom: 0; }
+td.model { font-weight: 500; }
+td.model button { all: unset; cursor: pointer; }
+td.model button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+td .lab-tag { font-weight: 400; }
+td .na { color: var(--fg-3); }
+td .rep { font-size: 11px; color: var(--fg-3); border: 1px solid var(--line-strong); border-radius: 999px; padding: 1px 6px; margin-left: 6px; font-weight: 400; }
+
+/* Tooltip */
+#tip {
+  position: fixed;
+  z-index: 50;
+  pointer-events: none;
+  background: var(--bg-panel);
+  color: var(--fg);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  padding: 10px 12px;
+  font-size: 12.5px;
+  min-width: 160px;
+  max-width: 260px;
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity 0.1s, transform 0.1s;
+}
+#tip.on { opacity: 1; transform: none; }
+#tip .t-title { font-weight: 600; font-size: 13.5px; letter-spacing: -0.01em; }
+#tip .t-sub { color: var(--fg-2); margin-top: 1px; }
+#tip .t-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+#tip .t-row .key { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+#tip .t-row b { font-weight: 600; font-variant-numeric: tabular-nums; }
+#tip .t-row span { color: var(--fg-2); }
+
+/* Footer */
+footer { border-top: 1px solid var(--line); padding-block: 36px 56px; color: var(--fg-2); font-size: 13.5px; }
+footer .cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+@media (max-width: 860px) { footer .cols { grid-template-columns: minmax(0, 1fr); } }
+footer h4 { margin: 0 0 8px; color: var(--fg); font-size: 13.5px; font-weight: 600; }
+footer p, footer ul { margin: 0; max-width: 62ch; }
+footer ul { padding-left: 18px; display: grid; gap: 4px; }
+footer .fine { margin-top: 28px; color: var(--fg-3); font-size: 12.5px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Frontier Pace home">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
+        <rect x="0.5" y="0.5" width="21" height="21" rx="6" fill="var(--accent)"></rect>
+        <path d="M5 15.5 L9 11 L12 13.5 L17 6.5" stroke="var(--on-accent)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      Frontier Pace
+    </a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#timeline">Timeline</a>
+      <a href="#scale">Compute &amp; context</a>
+      <a href="#benchmarks">Benchmarks</a>
+      <a href="#cadence">Cadence</a>
+      <a href="#models">All models</a>
+    </nav>
+    <div class="header-spacer"></div>
+    <div class="seg theme-seg" role="group" aria-label="Color theme">
+      <button type="button" id="theme-system" data-theme-set="system" aria-pressed="true" title="Match system (T to cycle)">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="3" width="12" height="8.5" rx="1.5"></rect><path d="M5.5 14h5M8 11.5V14"></path></svg>
+        <span class="lbl">System</span>
+      </button>
+      <button type="button" id="theme-light" data-theme-set="light" aria-pressed="false" title="Light (T to cycle)">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="3"></circle><path d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1"></path></svg>
+        <span class="lbl">Light</span>
+      </button>
+      <button type="button" id="theme-dark" data-theme-set="dark" aria-pressed="false" title="Dark (T to cycle)">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7z"></path></svg>
+        <span class="lbl">Dark</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <span class="pill"><b>Updated</b><span id="pill-text">Releases through November 2026</span></span>
+      <h1>The pace of frontier AI, release by release.</h1>
+      <p class="lede">Every flagship model from <strong>ChatGPT</strong>, <strong>Claude</strong>, <strong>Gemini</strong>, <strong>Grok</strong>, Llama, DeepSeek and Mistral, from GPT-1 in 2018 to this month. Track how training compute, context windows, benchmark scores and release cadence have grown.</p>
+      <div class="stats" id="stats"></div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="filters" role="region" aria-label="Filters">
+      <div class="chips" id="lab-chips"></div>
+      <div class="seg" role="group" aria-label="Time range" id="range-seg">
+        <button type="button" id="range-all" data-range="all" aria-pressed="true">Since 2018</button>
+        <button type="button" id="range-chatgpt" data-range="chatgpt" aria-pressed="false">Since ChatGPT</button>
+        <button type="button" id="range-24m" data-range="24m" aria-pressed="false">Last 24 months</button>
+      </div>
+      <div class="spacer"></div>
+      <span class="hint"><kbd>←</kbd><kbd>→</kbd> step models <kbd>T</kbd> theme</span>
+    </div>
+
+    <section class="block" id="timeline" style="padding-top:4px">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Release timeline</h3>
+          <span class="sub" id="tl-sub"></span>
+        </div>
+        <div class="tl-grid">
+          <div class="chart" id="tl-chart"></div>
+          <aside class="detail" id="detail" aria-live="polite"></aside>
+        </div>
+        <div class="panel-foot">
+          <div class="legend" id="tl-legend"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="scale">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow">Scale</div>
+          <h2>Compute and memory grow exponentially</h2>
+          <p>Both charts use a log scale, so a straight line means steady exponential growth. The dashed line is a least-squares fit across the models shown.</p>
+        </div>
+      </div>
+      <div class="two-up">
+        <div class="panel">
+          <div class="panel-head"><h3>Training compute</h3><span class="sub">FLOP, log scale</span></div>
+          <div class="headline-num" id="compute-head"></div>
+          <div class="chart" id="compute-chart"></div>
+          <div class="panel-foot">Estimates from Epoch AI where labs do not publish figures. Most closed 2025–26 models have no public estimate.</div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Context window at launch</h3><span class="sub">Tokens, log scale</span></div>
+          <div class="headline-num" id="context-head"></div>
+          <div class="chart" id="context-chart"></div>
+          <div class="panel-foot">Largest window offered at launch. Some models grew later, such as Gemini 1.5 Pro reaching 2M.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="benchmarks">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow">Capability</div>
+          <h2>Benchmarks went from hard to nearly solved</h2>
+          <p>The solid line tracks the best score published so far. Scores are vendor-reported with each lab's best setting, so treat small gaps as noise.</p>
+        </div>
+        <div class="seg" role="group" aria-label="Benchmark" id="bench-seg">
+          <button type="button" id="bench-gpqa" data-bench="gpqa" aria-pressed="true">GPQA Diamond</button>
+          <button type="button" id="bench-swe" data-bench="swe" aria-pressed="false">SWE-bench Verified</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h3 id="bench-title">GPQA Diamond</h3><span class="sub" id="bench-sub"></span></div>
+        <div class="headline-num" id="bench-head"></div>
+        <div class="chart" id="bench-chart"></div>
+        <div class="panel-foot">
+          <div class="legend">
+            <span><i class="ln"></i>Best score so far</span>
+            <span><i class="ln dash"></i>Reference level</span>
+          </div>
+          <span id="bench-note"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="cadence">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow">Cadence</div>
+          <h2>Releases now land weeks apart, not years</h2>
+          <p>Flagship releases per year in this dataset, stacked by lab. Minor point updates and small variants are left out.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="headline-num" id="cadence-head" style="padding-top:16px"></div>
+        <div class="chart" id="cadence-chart"></div>
+        <div class="panel-foot"><div class="legend" id="cadence-legend"></div></div>
+      </div>
+    </section>
+
+    <section class="block" id="models">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow">Data</div>
+          <h2>All models</h2>
+          <p>Every value in the charts above. Select a row to inspect it in the timeline. A dash means no reliable public figure.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="tbl-tools">
+          <label class="search" for="q">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="7" cy="7" r="4.5"></circle><path d="m10.5 10.5 3 3"></path></svg>
+            <input id="q" type="search" placeholder="Search models or labs" autocomplete="off">
+          </label>
+          <span class="tbl-count" id="tbl-count"></span>
+        </div>
+        <div class="tbl-scroll">
+          <table id="tbl">
+            <thead><tr id="tbl-head"></tr></thead>
+            <tbody id="tbl-body"></tbody>
+          </table>
+        </div>
+        <div class="tbl-more" id="tbl-more-wrap"><button type="button" class="btn" id="tbl-more"></button></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Method</h4>
+        <p>One entry per flagship release, dated by public launch. Training compute comes from published figures or Epoch AI estimates. Benchmarks are the scores labs reported at launch, in their best published setting.</p>
+      </div>
+      <div>
+        <h4>2026 releases</h4>
+        <p>Hollow markers are releases confirmed only by press and aggregator coverage at the time of writing. Sources disagreed on some dates, such as Grok 4.6 and GPT-6. Check the lab's own announcement before citing them.</p>
+      </div>
+      <div>
+        <h4>Sources</h4>
+        <ul>
+          <li><a href="https://epoch.ai/data/notable-ai-models" target="_blank" rel="noopener">Epoch AI, Notable AI Models</a></li>
+          <li><a href="https://arxiv.org/abs/2311.12022" target="_blank" rel="noopener">GPQA paper (Rein et al., 2023)</a></li>
+          <li><a href="https://www.swebench.com/" target="_blank" rel="noopener">SWE-bench</a></li>
+          <li>Lab announcements from OpenAI, Anthropic, Google, xAI, Meta, DeepSeek and Mistral</li>
+        </ul>
+      </div>
+    </div>
+    <p class="fine">Data last checked November 10, 2026. Figures are approximate and for illustration, not for procurement or compliance decisions.</p>
+  </div>
+</footer>
+
+<div id="tip" role="tooltip"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ================= Data ================= */
+  // Lab order = lane order. `slot` = categorical color slot (fixed, validated order).
+  var LABS = [
+    { id: "openai",    name: "OpenAI",    product: "ChatGPT",  shape: "diamond",  slot: 3 },
+    { id: "anthropic", name: "Anthropic", product: "Claude",   shape: "square",   slot: 2 },
+    { id: "google",    name: "Google",    product: "Gemini",   shape: "circle",   slot: 1 },
+    { id: "xai",       name: "xAI",       product: "Grok",     shape: "cross",    slot: 7 },
+    { id: "meta",      name: "Meta",      product: "Llama",    shape: "triDown",  slot: 5 },
+    { id: "deepseek",  name: "DeepSeek",  product: "DeepSeek", shape: "hex",      slot: 6 },
+    { id: "mistral",   name: "Mistral",   product: "Le Chat",  shape: "triangle", slot: 4 }
+  ];
+  var LAB = {};
+  LABS.forEach(function (l) { LAB[l.id] = l; });
+
+  // [lab, name, date, context tokens, training FLOP, GPQA Diamond %, SWE-bench Verified %, note, reported?]
+  var RAW = [
+    ["openai", "GPT-1", "2018-06-11", 512, 1.8e19, null, null, "117M parameters. Showed that generative pre-training followed by fine-tuning works."],
+    ["openai", "GPT-2", "2019-02-14", 1024, 1.9e21, null, null, "1.5B parameters. Released in stages over misuse concerns."],
+    ["openai", "GPT-3", "2020-05-28", 2048, 3.1e23, null, null, "175B parameters. Learned new tasks from a few examples in the prompt."],
+    ["google", "PaLM", "2022-04-04", 2048, 2.5e24, null, null, "540B parameters, trained across two TPU v4 pods with Pathways."],
+    ["openai", "GPT-3.5 (ChatGPT)", "2022-11-30", 4096, 2.6e24, null, null, "ChatGPT launches and reaches an estimated 100M users in about two months."],
+    ["meta", "LLaMA", "2023-02-24", 2048, 5.5e23, null, null, "Research release from 7B to 65B parameters. Weights leaked within a week."],
+    ["openai", "GPT-4", "2023-03-14", 32768, 2.1e25, 35.7, null, "Accepts images as input. Shipped in 8K and 32K context versions."],
+    ["anthropic", "Claude", "2023-03-14", 9000, null, null, null, "Anthropic's first public model. Context raised to 100K tokens in May 2023."],
+    ["google", "PaLM 2", "2023-05-10", 8192, 7.3e24, null, null, "Announced at Google I/O 2023 and used to power Bard."],
+    ["anthropic", "Claude 2", "2023-07-11", 100000, 3.9e24, null, null, "100K context and a public chat app at claude.ai."],
+    ["meta", "Llama 2", "2023-07-18", 4096, 8.1e23, null, null, "Open weights with a license that allows commercial use."],
+    ["mistral", "Mistral 7B", "2023-09-27", 8192, null, null, null, "Apache 2.0 weights that beat the larger Llama 2 13B."],
+    ["xai", "Grok-1", "2023-11-04", 8192, 2.9e24, null, null, "314B-parameter mixture-of-experts. Weights opened in March 2024."],
+    ["openai", "GPT-4 Turbo", "2023-11-06", 128000, null, null, null, "128K context and lower prices, announced at OpenAI DevDay."],
+    ["anthropic", "Claude 2.1", "2023-11-21", 200000, null, null, null, "The first 200K-token context window."],
+    ["google", "Gemini 1.0 Ultra", "2023-12-06", 32768, 5.0e25, null, null, "Natively multimodal. Google reported 90.0% on MMLU."],
+    ["mistral", "Mixtral 8x7B", "2023-12-11", 32768, null, null, null, "Sparse mixture-of-experts with open weights."],
+    ["google", "Gemini 1.5 Pro", "2024-02-15", 1000000, null, 46.2, null, "The first 1M-token context window. Raised to 2M in June 2024."],
+    ["mistral", "Mistral Large", "2024-02-26", 32768, null, null, null, "Mistral's first flagship API model."],
+    ["anthropic", "Claude 3 Opus", "2024-03-04", 200000, 1.6e25, 50.4, null, "Top model of the Claude 3 family (Haiku, Sonnet, Opus), with vision."],
+    ["xai", "Grok-1.5", "2024-03-28", 128000, null, null, null, "128K context and stronger math and coding."],
+    ["meta", "Llama 3", "2024-04-18", 8192, 6.3e24, null, null, "8B and 70B models trained on 15T tokens."],
+    ["deepseek", "DeepSeek-V2", "2024-05-06", 128000, null, null, null, "Mixture-of-experts with multi-head latent attention. Set off an API price war."],
+    ["openai", "GPT-4o", "2024-05-13", 128000, 3.8e25, 53.6, 33.2, "Text, vision and real-time voice in one model."],
+    ["anthropic", "Claude 3.5 Sonnet", "2024-06-20", 200000, null, 59.4, 33.4, "Beat Claude 3 Opus at a fifth of the price. Launched Artifacts."],
+    ["meta", "Llama 3.1 405B", "2024-07-23", 128000, 3.8e25, 51.1, null, "The largest open-weight model at launch."],
+    ["mistral", "Mistral Large 2", "2024-07-24", 128000, null, null, null, "123B parameters with 128K context."],
+    ["xai", "Grok-2", "2024-08-13", 128000, 3.0e25, 56.0, null, "A large jump over Grok-1.5, with image generation in X."],
+    ["openai", "o1-preview", "2024-09-12", 128000, null, 73.3, null, "The first reasoning model trained to think before it answers."],
+    ["anthropic", "Claude 3.5 Sonnet (new)", "2024-10-22", 200000, null, 65.0, 49.0, "Introduced computer use in public beta."],
+    ["openai", "o1", "2024-12-05", 200000, null, 78.0, 48.9, "Full o1 release, alongside the ChatGPT Pro plan."],
+    ["google", "Gemini 2.0 Flash", "2024-12-11", 1048576, null, 62.1, null, "Built for agents, with native tool use and multimodal output."],
+    ["deepseek", "DeepSeek-V3", "2024-12-26", 128000, 3.4e24, 59.1, 42.0, "671B mixture-of-experts. Reported final training run cost about $5.6M."],
+    ["deepseek", "DeepSeek-R1", "2025-01-20", 128000, null, 71.5, 49.2, "Open-weight reasoning model that rivaled o1."],
+    ["openai", "o3-mini", "2025-01-31", 200000, null, 79.7, 49.3, "Small reasoning model, available on the ChatGPT free tier."],
+    ["xai", "Grok 3", "2025-02-17", 131072, 4.6e26, 84.6, null, "Trained on the Colossus cluster. Added Think mode."],
+    ["anthropic", "Claude 3.7 Sonnet", "2025-02-24", 200000, null, 78.2, 62.3, "The first hybrid reasoning model. Claude Code research preview."],
+    ["openai", "GPT-4.5", "2025-02-27", 128000, null, 71.4, 38.0, "OpenAI's largest pre-trained model at the time."],
+    ["google", "Gemini 2.5 Pro", "2025-03-25", 1048576, null, 84.0, 63.8, "A thinking model. Topped LMArena at launch."],
+    ["meta", "Llama 4", "2025-04-05", 10000000, 2.2e24, 69.8, null, "Scout (10M context) and Maverick. Compute shown is for Maverick."],
+    ["openai", "GPT-4.1", "2025-04-14", 1047576, null, 66.3, 54.6, "1M-token context in the API and strong coding."],
+    ["openai", "o3", "2025-04-16", 200000, null, 83.3, 69.1, "Reasoning that uses tools: search, Python and images."],
+    ["mistral", "Mistral Medium 3", "2025-05-07", 128000, null, null, null, "Near-frontier performance at lower cost."],
+    ["anthropic", "Claude Opus 4", "2025-05-22", 200000, null, 79.6, 72.5, "Long-running agentic coding. Claude Code became generally available."],
+    ["xai", "Grok 4", "2025-07-09", 256000, null, 87.5, null, "Shipped with Grok 4 Heavy, a multi-agent variant."],
+    ["anthropic", "Claude Opus 4.1", "2025-08-05", 200000, null, 80.9, 74.5, "An incremental upgrade for agentic tasks."],
+    ["openai", "GPT-5", "2025-08-07", 400000, null, 87.3, 74.9, "One system that routes between fast and thinking modes."],
+    ["deepseek", "DeepSeek-V3.1", "2025-08-21", 128000, null, 80.1, 66.0, "Hybrid thinking and non-thinking modes in one model."],
+    ["anthropic", "Claude Sonnet 4.5", "2025-09-29", 200000, null, 83.4, 77.2, "Sustained autonomous coding runs of many hours."],
+    ["openai", "GPT-5.1", "2025-11-12", 400000, null, 88.1, 76.3, "Adaptive reasoning and a warmer default style."],
+    ["xai", "Grok 4.1", "2025-11-17", 256000, null, null, null, "Better emotional intelligence and creative writing."],
+    ["google", "Gemini 3 Pro", "2025-11-18", 1048576, null, 91.9, 76.2, "Topped LMArena at launch."],
+    ["anthropic", "Claude Opus 4.5", "2025-11-24", 200000, null, 87.0, 80.9, "The first model reported above 80% on SWE-bench Verified."],
+    ["deepseek", "DeepSeek-V3.2", "2025-12-01", 128000, null, 82.4, 73.1, "Sparse attention for cheaper long-context use."],
+    ["mistral", "Mistral Large 3", "2025-12-02", 256000, null, null, null, "Open-weight mixture-of-experts under Apache 2.0."],
+    ["openai", "GPT-5.2", "2025-12-11", 400000, null, 92.4, 80.0, "Thinking mode set new highs on GPQA and ARC-AGI-2."],
+    ["google", "Gemini 3 Flash", "2025-12-17", 1048576, null, 90.4, 78.0, "Frontier-level scores at Flash prices."],
+    ["anthropic", "Claude Opus 4.6", "2026-02-05", 1000000, null, null, null, "Reported with a 1M-token context window.", true],
+    ["google", "Gemini 3.1 Pro", "2026-02-19", 1048576, null, null, null, "Point upgrade to Gemini 3 Pro.", true],
+    ["openai", "GPT-5.4", "2026-03-05", null, null, null, null, "Brought GPT-5.3-Codex coding into the main reasoning model.", true],
+    ["anthropic", "Claude Opus 4.7", "2026-04-16", null, null, null, null, "Reported to add adaptive thinking and an xhigh effort level.", true],
+    ["openai", "GPT-5.5", "2026-04-23", 1000000, null, null, null, "Built for multi-step agentic work. A Pro tier shipped alongside it."],
+    ["google", "Gemini 3.5 Flash", "2026-05-19", null, null, null, null, "Announced at Google I/O 2026. Gemini 3.5 Pro was delayed.", true],
+    ["anthropic", "Claude Opus 4.8", "2026-05-28", null, null, null, null, "Arrived 42 days after Opus 4.7."],
+    ["anthropic", "Claude Fable 5", "2026-06-09", null, null, null, null, "Released with Claude Mythos 5, which stayed limited to vetted partners.", true],
+    ["openai", "GPT-5.6", "2026-07-09", null, null, null, null, "Shipped in Sol, Terra and Luna tiers.", true],
+    ["xai", "Grok 4.5", "2026-07", null, null, null, null, "Released in mid-July. The exact day is unconfirmed.", true],
+    ["anthropic", "Claude Opus 5", "2026-07-24", null, null, null, null, "Priced the same as Opus 4.8."],
+    ["xai", "Grok 4.6", "2026-08-12", null, null, null, null, "Sources disagree on the release date.", true],
+    ["anthropic", "Claude Fable 5.1", "2026-09-01", null, null, null, null, "Successor to Fable 5 with stronger coding.", true],
+    ["openai", "GPT-6", "2026-09-03", null, null, null, null, "Listed by several aggregators. Not confirmed against OpenAI's own pages.", true],
+    ["xai", "Grok 4.7", "2026-09-21", null, null, null, null, "Released after a delay for extra tuning.", true],
+    ["anthropic", "Claude Opus 5.5", "2026-09-22", null, null, null, null, "Opus point upgrade in the Claude 5 family.", true],
+    ["anthropic", "Claude Fable 5.2", "2026-11-09", null, null, null, null, "The newest release in this dataset.", true]
+  ];
+
+  var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  function parseDate(s) {
+    var p = s.split("-").map(Number);
+    var monthOnly = p.length === 2;
+    return { t: Date.UTC(p[0], p[1] - 1, monthOnly ? 15 : p[2]), monthOnly: monthOnly };
+  }
+  var MODELS = RAW.map(function (r, i) {
+    var d = parseDate(r[2]);
+    return {
+      id: "m" + i, lab: r[0], name: r[1], dateStr: r[2], t: d.t, monthOnly: d.monthOnly,
+      ctx: r[3], flop: r[4], gpqa: r[5], swe: r[6], note: r[7], reported: !!r[8]
+    };
+  }).sort(function (a, b) { return a.t - b.t || a.name.localeCompare(b.name); });
+  var BY_ID = {};
+  MODELS.forEach(function (m) { BY_ID[m.id] = m; });
+
+  var TODAY = Date.UTC(2026, 10, 10);
+  var YEAR_MS = 365.25 * 864e5;
+  var RANGES = {
+    all: [Date.UTC(2018, 0, 1), Date.UTC(2026, 11, 31)],
+    chatgpt: [Date.UTC(2022, 9, 1), Date.UTC(2026, 11, 31)],
+    "24m": [Date.UTC(2024, 10, 1), Date.UTC(2026, 11, 31)]
+  };
+
+  /* ================= State ================= */
+  var state = {
+    labs: new Set(LABS.map(function (l) { return l.id; })),
+    range: "all",
+    bench: "gpqa",
+    selected: MODELS[MODELS.length - 1].id,
+    sort: { key: "t", dir: -1 },
+    q: "",
+    showAll: false
+  };
+
+  function visible() {
+    var r = RANGES[state.range];
+    return MODELS.filter(function (m) { return state.labs.has(m.lab) && m.t >= r[0] && m.t <= r[1]; });
+  }
+
+  /* ================= Formatting ================= */
+  function fmtDate(m) {
+    var d = new Date(m.t);
+    if (m.monthOnly) return MONTHS[d.getUTCMonth()] + " " + d.getUTCFullYear();
+    return MONTHS[d.getUTCMonth()] + " " + d.getUTCDate() + ", " + d.getUTCFullYear();
+  }
+  function fmtCtx(n) {
+    if (n == null) return "—";
+    if (n >= 1e6) return trim(n / 1e6) + "M";
+    if (n >= 1000) return Math.round(n / 1000) + "K";
+    return String(n);
+  }
+  function trim(x) { var s = x.toFixed(1); return s.slice(-2) === ".0" ? s.slice(0, -2) : s; }
+  var SUP = { "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹", "-": "⁻" };
+  function sup(n) { return String(n).split("").map(function (c) { return SUP[c]; }).join(""); }
+  function fmtFlop(n) {
+    if (n == null) return "—";
+    var e = Math.floor(Math.log10(n));
+    var c = n / Math.pow(10, e);
+    return trim(c) + "×10" + sup(e);
+  }
+  function fmtPow10(e) { return "10" + sup(e); }
+  function fmtPct(v) { return v == null ? "—" : v.toFixed(1) + "%"; }
+  function fmtInt(n) { return n.toLocaleString("en-US"); }
+
+  /* ================= SVG helpers ================= */
+  var NS = "http://www.w3.org/2000/svg";
+  function svgEl(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    if (attrs) for (var k in attrs) if (attrs[k] != null) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function shapePath(shape, r) {
+    var p = [], i, a;
+    switch (shape) {
+      case "square": var s = r * 0.88; return "M" + (-s) + "," + (-s) + "h" + 2 * s + "v" + 2 * s + "h" + (-2 * s) + "Z";
+      case "diamond": var d = r * 1.22; return "M0," + (-d) + "L" + d + ",0L0," + d + "L" + (-d) + ",0Z";
+      case "triangle": return "M0," + (-r * 1.2) + "L" + r * 1.15 + "," + r * 0.85 + "L" + (-r * 1.15) + "," + r * 0.85 + "Z";
+      case "triDown": return "M0," + r * 1.2 + "L" + r * 1.15 + "," + (-r * 0.85) + "L" + (-r * 1.15) + "," + (-r * 0.85) + "Z";
+      case "hex":
+        for (i = 0; i < 6; i++) { a = Math.PI / 3 * i; p.push((r * 1.05 * Math.cos(a)).toFixed(2) + "," + (r * 1.05 * Math.sin(a)).toFixed(2)); }
+        return "M" + p.join("L") + "Z";
+      case "cross":
+        var w = r * 0.42, L = r * 1.1;
+        return "M" + (-w) + "," + (-L) + "H" + w + "V" + (-w) + "H" + L + "V" + w + "H" + w + "V" + L + "H" + (-w) + "V" + w + "H" + (-L) + "V" + (-w) + "H" + (-w) + "Z";
+      default: return null;
+    }
+  }
+  function drawShape(g, shape, r, color, cls) {
+    var path = shapePath(shape, r), e;
+    if (path) e = svgEl("path", { d: path, "class": cls || "shape" }, g);
+    else e = svgEl("circle", { r: r, "class": cls || "shape" }, g);
+    e.style.fill = color;
+    return e;
+  }
+  function labColor(id) { return "var(--lab-" + id + ")"; }
+  function iconSvg(lab, size) {
+    var s = document.createElementNS(NS, "svg");
+    s.setAttribute("viewBox", "-7 -7 14 14");
+    s.setAttribute("aria-hidden", "true");
+    if (size) { s.setAttribute("width", size); s.setAttribute("height", size); }
+    var e = drawShape(s, LAB[lab].shape, 5, labColor(lab), "");
+    e.removeAttribute("class");
+    return s;
+  }
+  function h(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function labTag(lab) {
+    var s = h("span", "lab-tag");
+    s.appendChild(iconSvg(lab));
+    s.appendChild(document.createTextNode(LAB[lab].name));
+    return s;
+  }
+
+  /* ================= Tooltip ================= */
+  var tip = document.getElementById("tip");
+  function showTip(evt, build) {
+    tip.textContent = "";
+    build(tip);
+    tip.classList.add("on");
+    moveTip(evt);
+  }
+  function moveTip(evt) {
+    var x, y;
+    if (evt && evt.clientX != null && evt.type.indexOf("pointer") === 0) { x = evt.clientX; y = evt.clientY; }
+    else if (evt && evt.target && evt.target.getBoundingClientRect) {
+      var b = evt.target.getBoundingClientRect(); x = b.left + b.width / 2; y = b.top;
+    } else return;
+    var tw = tip.offsetWidth, th = tip.offsetHeight;
+    var left = x + 14, top = y - th - 12;
+    if (left + tw > window.innerWidth - 8) left = x - tw - 14;
+    if (left < 8) left = 8;
+    if (top < 8) top = y + 18;
+    tip.style.left = left + "px";
+    tip.style.top = top + "px";
+  }
+  function hideTip() { tip.classList.remove("on"); }
+  function modelTip(m, rows) {
+    return function (t) {
+      t.appendChild(h("div", "t-title", m.name));
+      t.appendChild(h("div", "t-sub", LAB[m.lab].name + " · " + fmtDate(m) + (m.reported ? " · reported" : "")));
+      (rows || []).forEach(function (r) {
+        var row = h("div", "t-row");
+        var key = h("i", "key"); key.style.background = labColor(m.lab);
+        row.appendChild(key);
+        row.appendChild(h("b", null, r[1]));
+        row.appendChild(h("span", null, r[0]));
+        t.appendChild(row);
+      });
+    };
+  }
+  function bindMarker(g, m, rows) {
+    g.addEventListener("pointerenter", function (e) { showTip(e, modelTip(m, rows)); });
+    g.addEventListener("pointermove", moveTip);
+    g.addEventListener("pointerleave", hideTip);
+    g.addEventListener("focus", function (e) { showTip(e, modelTip(m, rows)); });
+    g.addEventListener("blur", hideTip);
+    g.addEventListener("click", function () { select(m.id); });
+    g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(m.id); } });
+  }
+
+  /* ================= Scales & ticks ================= */
+  function lin(d0, d1, r0, r1) {
+    var f = function (v) { return r0 + (v - d0) / (d1 - d0) * (r1 - r0); };
+    return f;
+  }
+  function timeTicks(t0, t1, px) {
+    var spanY = (t1 - t0) / YEAR_MS;
+    var step = spanY > 4 ? 12 : spanY > 1.5 ? 6 : 3;
+    var d = new Date(t0);
+    var y = d.getUTCFullYear(), mo = Math.ceil(d.getUTCMonth() / step) * step;
+    var ticks = [];
+    for (var guard = 0; guard < 200; guard++) {
+      var t = Date.UTC(y, mo, 1);
+      if (t > t1) break;
+      if (t >= t0) ticks.push({ t: t, label: mo % 12 === 0 ? String(y + Math.floor(mo / 12)) : MONTHS[mo % 12] });
+      mo += step;
+      if (mo >= 12) { y += Math.floor(mo / 12); mo = mo % 12; }
+    }
+    // thin labels on narrow widths
+    var every = 1;
+    while (ticks.length / every > 1 && px / (ticks.length / every) < 44) every++;
+    ticks.forEach(function (tk, i) { tk.show = i % every === 0; });
+    return ticks;
+  }
+  function drawXAxis(g, x, t0, t1, top, bottom, width) {
+    var ticks = timeTicks(t0, t1, width);
+    ticks.forEach(function (tk) {
+      var xx = x(tk.t);
+      svgEl("line", { x1: xx, x2: xx, y1: top, y2: bottom, "class": "grid" }, g);
+      if (tk.show) {
+        var tx = svgEl("text", { x: xx + 4, y: bottom + 17 }, g);
+        tx.textContent = tk.label;
+      }
+    });
+    svgEl("line", { x1: x(t0), x2: x(t1), y1: bottom, y2: bottom, "class": "base" }, g);
+  }
+
+  /* ================= Regression ================= */
+  function fitLog2(points) { // points: [{t, v}] -> slope doublings/year
+    if (points.length < 3) return null;
+    var n = points.length, sx = 0, sy = 0, sxx = 0, sxy = 0;
+    points.forEach(function (p) {
+      var xv = p.t / YEAR_MS, yv = Math.log2(p.v);
+      sx += xv; sy += yv; sxx += xv * xv; sxy += xv * yv;
+    });
+    var den = n * sxx - sx * sx;
+    if (!den) return null;
+    var b = (n * sxy - sx * sy) / den;
+    var a = (sy - b * sx) / n;
+    return { slope: b, at: function (t) { return Math.pow(2, a + b * t / YEAR_MS); } };
+  }
+
+  /* ================= Timeline ================= */
+  var tlHost = document.getElementById("tl-chart");
+  function renderTimeline() {
+    var W = Math.max(300, tlHost.clientWidth - 16);
+    var labs = LABS.filter(function (l) { return state.labs.has(l.id); });
+    var narrow = W < 560;
+    var labelW = narrow ? 76 : 118, top = 30, laneH = 46, right = 14;
+    var H = top + laneH * Math.max(1, labs.length) + 30;
+    var r = RANGES[state.range];
+    var x = lin(r[0], r[1], labelW, W - right);
+    tlHost.textContent = "";
+    var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, height: H, role: "group", "aria-label": "Release timeline by lab" }, tlHost);
+    var ax = svgEl("g", { "class": "ax" }, svg);
+    drawXAxis(ax, x, r[0], r[1], top - 6, H - 30, W - labelW - right);
+
+    // annotations
+    var ann = [
+      { t: Date.UTC(2022, 10, 30), label: "ChatGPT launches" },
+      { t: Date.UTC(2024, 8, 12), label: "Reasoning models" }
+    ];
+    ann.forEach(function (a) {
+      if (a.t < r[0] || a.t > r[1]) return;
+      var g = svgEl("g", { "class": "ann" }, svg);
+      var xx = x(a.t);
+      svgEl("line", { x1: xx, x2: xx, y1: top - 10, y2: H - 30 }, g);
+      var tx = svgEl("text", { x: xx - 4, y: top - 14, "text-anchor": "end" }, g);
+      tx.textContent = a.label;
+    });
+    var tg = svgEl("g", { "class": "ann today" }, svg);
+    svgEl("line", { x1: x(TODAY), x2: x(TODAY), y1: top - 10, y2: H - 30 }, tg);
+    var tt = svgEl("text", { x: x(TODAY) + 4, y: top - 14 }, tg); tt.textContent = "Today";
+    if (x(TODAY) + 40 > W) { tt.setAttribute("x", x(TODAY) - 4); tt.setAttribute("text-anchor", "end"); }
+
+    var vis = visible();
+    var selLabel = null;
+    labs.forEach(function (lab, li) {
+      var cy = top + laneH * li + laneH / 2;
+      if (li > 0) svgEl("line", { x1: 0, x2: W - right, y1: top + laneH * li, y2: top + laneH * li, "class": "grid", style: "stroke:var(--grid)" }, svg);
+      var lt = svgEl("text", { x: 4, y: narrow ? cy + 4 : cy - 2, "class": "lane-label" }, svg);
+      lt.textContent = lab.name;
+      if (!narrow) { var ls = svgEl("text", { x: 4, y: cy + 14, "class": "lane-sub" }, svg); ls.textContent = lab.product; }
+
+      var lastX = -99, flip = 1, offset = 0;
+      vis.filter(function (m) { return m.lab === lab.id; }).forEach(function (m) {
+        var mx = x(m.t);
+        if (mx - lastX < 13) { offset = offset === 0 ? -8 * flip : (offset < 0 ? 8 : -8); flip = -flip; }
+        else offset = 0;
+        lastX = mx;
+        var g = svgEl("g", { "class": "mk" + (m.reported ? " rep" : ""), transform: "translate(" + mx.toFixed(1) + "," + (cy + offset) + ")", tabindex: 0, role: "button", "aria-label": m.name + ", " + LAB[m.lab].name + ", " + fmtDate(m) }, svg);
+        svgEl("circle", { r: 12, "class": "hit" }, g);
+        if (m.id === state.selected) svgEl("circle", { r: 10.5, "class": "ring" }, g);
+        var sh = drawShape(g, lab.shape, 5.5, labColor(lab.id));
+        if (m.reported) sh.style.stroke = labColor(lab.id);
+        bindMarker(g, m, [["context", fmtCtx(m.ctx)]].filter(function (rw) { return m.ctx != null; }));
+        if (m.id === state.selected) selLabel = { x: mx, y: cy + offset, m: m };
+      });
+    });
+    if (selLabel) {
+      var anchorEnd = selLabel.x > W - 140;
+      var dl = svgEl("text", { x: selLabel.x + (anchorEnd ? -14 : 14), y: selLabel.y - 10, "class": "dlabel", "text-anchor": anchorEnd ? "end" : "start" }, svg);
+      dl.textContent = selLabel.m.name;
+    }
+    var sub = document.getElementById("tl-sub");
+    sub.textContent = vis.length + " releases shown";
+  }
+
+  /* ================= Detail card ================= */
+  var detail = document.getElementById("detail");
+  function renderDetail() {
+    var m = BY_ID[state.selected];
+    detail.textContent = "";
+    if (!m) { detail.appendChild(h("p", "note", "No release matches the current filters.")); return; }
+    var top = h("div", "top");
+    top.appendChild(labTag(m.lab));
+    var st = h("span", "status" + (m.reported ? "" : " ok"));
+    st.innerHTML = m.reported
+      ? '<svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>'
+      : '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.2 5 8.5l4.5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    st.appendChild(document.createTextNode(m.reported ? "Reported" : "Confirmed"));
+    top.appendChild(st);
+    detail.appendChild(top);
+
+    var head = h("div");
+    head.appendChild(h("h3", null, m.name));
+    var prev = MODELS.filter(function (o) { return o.lab === m.lab && o.t < m.t; }).pop();
+    var when = "Released " + fmtDate(m);
+    if (prev) {
+      var days = Math.round((m.t - prev.t) / 864e5);
+      when += " · " + fmtInt(days) + " days after " + prev.name;
+    } else when += " · first " + LAB[m.lab].name + " entry";
+    head.appendChild(h("div", "when", when));
+    detail.appendChild(head);
+
+    var dl = h("dl", "facts");
+    [["Context window", m.ctx != null ? fmtCtx(m.ctx) + " tokens" : null],
+     ["Training compute", m.flop != null ? fmtFlop(m.flop) + " FLOP" : null],
+     ["GPQA Diamond", m.gpqa != null ? fmtPct(m.gpqa) : null],
+     ["SWE-bench Verified", m.swe != null ? fmtPct(m.swe) : null]].forEach(function (f) {
+      var d = h("div");
+      d.appendChild(h("dt", null, f[0]));
+      d.appendChild(h("dd", f[1] == null ? "na" : null, f[1] == null ? "Not public" : f[1]));
+      dl.appendChild(d);
+    });
+    detail.appendChild(dl);
+    detail.appendChild(h("p", "note", m.note));
+
+    var list = visible();
+    var idx = list.findIndex(function (o) { return o.id === m.id; });
+    var stepper = h("div", "stepper");
+    var bp = h("button", "btn"); bp.type = "button"; bp.id = "step-prev";
+    bp.appendChild(h("kbd", null, "←")); bp.appendChild(document.createTextNode("Previous"));
+    bp.disabled = idx <= 0;
+    bp.addEventListener("click", function () { step(-1); });
+    var bn = h("button", "btn primary"); bn.type = "button"; bn.id = "step-next";
+    bn.appendChild(document.createTextNode("Next")); bn.appendChild(h("kbd", null, "→"));
+    bn.disabled = idx < 0 || idx >= list.length - 1;
+    bn.addEventListener("click", function () { step(1); });
+    stepper.appendChild(bp); stepper.appendChild(bn);
+    detail.appendChild(stepper);
+  }
+  function step(dir) {
+    var list = visible();
+    var idx = list.findIndex(function (o) { return o.id === state.selected; });
+    var n = list[Math.min(list.length - 1, Math.max(0, idx + dir))];
+    if (n) select(n.id);
+  }
+
+  /* ================= Scatter over time ================= */
+  function scatter(host, opt) {
+    var W = Math.max(280, host.clientWidth - 16);
+    var H = opt.height || 300;
+    var m = { t: 14, r: 18, b: 30, l: opt.left || 50 };
+    var rng = RANGES[state.range];
+    var x = lin(rng[0], rng[1], m.l, W - m.r);
+    var data = visible().filter(function (d) { return d[opt.key] != null; });
+    host.textContent = "";
+    var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, height: H, role: "img", "aria-label": opt.aria }, host);
+    var ax = svgEl("g", { "class": "ax" }, svg);
+
+    var y, ticks = [];
+    if (opt.log) {
+      var vals = data.map(function (d) { return d[opt.key]; });
+      var lo = vals.length ? Math.floor(Math.log10(Math.min.apply(null, vals))) : opt.logDefault[0];
+      var hi = vals.length ? Math.ceil(Math.log10(Math.max.apply(null, vals))) : opt.logDefault[1];
+      if (hi - lo < 2) { hi = lo + 2; }
+      var yl = lin(lo, hi, H - m.b, m.t);
+      y = function (v) { return yl(Math.log10(v)); };
+      var stepE = hi - lo > 6 ? 2 : 1;
+      for (var e = lo; e <= hi; e += stepE) ticks.push({ v: Math.pow(10, e), label: opt.tickFmt(e) });
+    } else {
+      y = lin(opt.domain[0], opt.domain[1], H - m.b, m.t);
+      for (var v = opt.domain[0]; v <= opt.domain[1]; v += opt.tickStep) ticks.push({ v: v, label: v + "%" });
+    }
+    ticks.forEach(function (tk) {
+      var yy = y(tk.v);
+      svgEl("line", { x1: m.l, x2: W - m.r, y1: yy, y2: yy, "class": "grid" }, ax);
+      var tx = svgEl("text", { x: m.l - 8, y: yy + 4, "text-anchor": "end" }, ax);
+      tx.textContent = tk.label;
+    });
+    // x axis (bottom only, no vertical grid to stay recessive)
+    var xt = timeTicks(rng[0], rng[1], W - m.l - m.r);
+    xt.forEach(function (tk) {
+      if (!tk.show) return;
+      var tx = svgEl("text", { x: x(tk.t), y: H - m.b + 18, "text-anchor": "middle" }, ax);
+      tx.textContent = tk.label;
+    });
+    svgEl("line", { x1: m.l, x2: W - m.r, y1: H - m.b, y2: H - m.b, "class": "base" }, ax);
+
+    (opt.refs || []).forEach(function (rf) {
+      var g = svgEl("g", { "class": "ref" }, svg);
+      var yy = y(rf.v);
+      svgEl("line", { x1: m.l, x2: W - m.r, y1: yy, y2: yy }, g);
+      var tx = svgEl("text", { x: m.l + 6, y: yy - 5 }, g);
+      tx.textContent = rf.label;
+    });
+
+    var fit = null;
+    if (opt.trend && data.length >= 3) {
+      fit = fitLog2(data.map(function (d) { return { t: d.t, v: d[opt.key] }; }));
+      if (fit) {
+        var t0 = data[0].t, t1 = data[data.length - 1].t;
+        svgEl("line", { x1: x(t0), y1: y(fit.at(t0)), x2: x(t1), y2: y(fit.at(t1)), "class": "trend" }, svg);
+      }
+    }
+    var front = [];
+    if (opt.frontier && data.length) {
+      var best = -Infinity, pts = [];
+      data.forEach(function (d) {
+        if (d[opt.key] > best) {
+          if (pts.length) pts.push([x(d.t), y(best)]);
+          best = d[opt.key];
+          pts.push([x(d.t), y(best)]);
+          front.push(d);
+        }
+      });
+      pts.push([Math.min(x(TODAY), W - m.r), y(best)]);
+      svgEl("path", { d: "M" + pts.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join("L"), "class": "frontier" }, svg);
+    }
+
+    var labelIds = {};
+    if (opt.frontier && front.length) { labelIds[front[0].id] = "muted"; labelIds[front[front.length - 1].id] = ""; }
+    if (opt.labelExtremes && data.length) {
+      var mx = data.reduce(function (a, b) { return b[opt.key] > a[opt.key] ? b : a; });
+      var mn = data[0];
+      labelIds[mn.id] = "muted"; labelIds[mx.id] = "";
+    }
+    data.forEach(function (d) {
+      var g = svgEl("g", { "class": "mk" + (d.reported ? " rep" : ""), transform: "translate(" + x(d.t).toFixed(1) + "," + y(d[opt.key]).toFixed(1) + ")" }, svg);
+      svgEl("circle", { r: 12, "class": "hit" }, g);
+      if (d.id === state.selected) { svgEl("circle", { r: 10.5, "class": "ring" }, g); labelIds[d.id] = labelIds[d.id] || ""; }
+      drawShape(g, LAB[d.lab].shape, 5, labColor(d.lab));
+      bindMarker(g, d, [[opt.label, opt.fmt(d[opt.key])]]);
+    });
+    // direct labels last so they sit on top
+    data.forEach(function (d) {
+      if (!(d.id in labelIds)) return;
+      var px = x(d.t), py = y(d[opt.key]);
+      var end = px > W - 150;
+      var below = py < m.t + 18;
+      var tx = svgEl("text", { x: px + (end ? -12 : 12), y: below ? py + 18 : py - 9, "text-anchor": end ? "end" : "start", "class": "dlabel " + labelIds[d.id] }, svg);
+      tx.textContent = d.name;
+    });
+    return { data: data, fit: fit, front: front };
+  }
+
+  function setHead(id, big, ctx) {
+    var el = document.getElementById(id);
+    el.textContent = "";
+    el.appendChild(h("span", "big", big));
+    el.appendChild(h("span", "ctx", ctx));
+  }
+
+  function doublingText(fit) {
+    var months = 12 / fit.slope;
+    return months < 1.5 ? (months * 30.4).toFixed(0) + " days" : months.toFixed(1) + " months";
+  }
+
+  function renderCompute() {
+    var res = scatter(document.getElementById("compute-chart"), {
+      key: "flop", log: true, logDefault: [18, 27], tickFmt: fmtPow10, trend: true, labelExtremes: true,
+      fmt: fmtFlop, label: "FLOP", aria: "Training compute over time, log scale", height: 300, left: 46
+    });
+    if (res.fit) {
+      var perYear = Math.pow(2, res.fit.slope);
+      setHead("compute-head", "×" + trim(perYear) + " per year", "Compute doubles every " + doublingText(res.fit) + " across " + res.data.length + " models");
+    } else setHead("compute-head", "—", "Not enough models with compute estimates in this filter");
+  }
+  function renderContext() {
+    var res = scatter(document.getElementById("context-chart"), {
+      key: "ctx", log: true, logDefault: [2, 7], tickFmt: function (e) { return fmtCtx(Math.pow(10, e)); }, trend: true, labelExtremes: true,
+      fmt: function (v) { return fmtCtx(v) + " tokens"; }, label: "context", aria: "Context window over time, log scale", height: 300, left: 46
+    });
+    if (res.fit && res.data.length) {
+      var lo = res.data[0];
+      var hi = res.data.reduce(function (a, b) { return b.ctx > a.ctx ? b : a; });
+      var mult = Math.round(hi.ctx / lo.ctx);
+      setHead("context-head", "×" + fmtInt(mult), fmtCtx(lo.ctx) + " (" + lo.name + ") to " + fmtCtx(hi.ctx) + " (" + hi.name + "). Doubles every " + doublingText(res.fit));
+    } else setHead("context-head", "—", "Not enough models in this filter");
+  }
+
+  var BENCH = {
+    gpqa: {
+      title: "GPQA Diamond", sub: "198 graduate-level science questions", domain: [20, 100], step: 20,
+      refs: [{ v: 65, label: "Domain experts ≈ 65%" }, { v: 25, label: "Random guess 25%" }],
+      note: "Expert baseline from the GPQA paper."
+    },
+    swe: {
+      title: "SWE-bench Verified", sub: "500 real GitHub issues, human-validated", domain: [0, 100], step: 20,
+      refs: [],
+      note: "Benchmark released August 2024; earlier models have no score."
+    }
+  };
+  function renderBench() {
+    var b = BENCH[state.bench];
+    document.getElementById("bench-title").textContent = b.title;
+    document.getElementById("bench-sub").textContent = b.sub;
+    document.getElementById("bench-note").textContent = b.note + " 2026 scores are left out because sources were inconsistent.";
+    var res = scatter(document.getElementById("bench-chart"), {
+      key: state.bench, log: false, domain: b.domain, tickStep: b.step, refs: b.refs, frontier: true,
+      fmt: fmtPct, label: b.title, aria: b.title + " scores over time", height: 340, left: 42
+    });
+    if (res.front.length >= 2) {
+      var f0 = res.front[0], f1 = res.front[res.front.length - 1];
+      var yrs = (f1.t - f0.t) / YEAR_MS;
+      setHead("bench-head", fmtPct(f0[state.bench]) + " → " + fmtPct(f1[state.bench]),
+        "Best score from " + f0.name + " to " + f1.name + " in " + trim(yrs) + " years");
+    } else if (res.front.length === 1) {
+      setHead("bench-head", fmtPct(res.front[0][state.bench]), "Best score in this filter: " + res.front[0].name);
+    } else setHead("bench-head", "—", "No scores for the current filter");
+  }
+
+  /* ================= Cadence bars ================= */
+  function renderCadence() {
+    var host = document.getElementById("cadence-chart");
+    var W = Math.max(280, host.clientWidth - 16), H = 280;
+    var m = { t: 22, r: 14, b: 30, l: 34 };
+    var rng = RANGES[state.range];
+    var y0 = new Date(rng[0]).getUTCFullYear(), y1 = 2026;
+    if (new Date(rng[0]).getUTCMonth() > 6) y0++;
+    var years = []; for (var yy = y0; yy <= y1; yy++) years.push(yy);
+    var order = LABS.slice().sort(function (a, b) { return a.slot - b.slot; }).filter(function (l) { return state.labs.has(l.id); });
+    var counts = {};
+    years.forEach(function (yr) { counts[yr] = {}; order.forEach(function (l) { counts[yr][l.id] = 0; }); });
+    MODELS.forEach(function (md) {
+      var yr = new Date(md.t).getUTCFullYear();
+      if (counts[yr] && state.labs.has(md.lab)) counts[yr][md.lab]++;
+    });
+    var totals = years.map(function (yr) { return order.reduce(function (s, l) { return s + counts[yr][l.id]; }, 0); });
+    var maxT = Math.max(4, Math.max.apply(null, totals));
+    var niceMax = Math.ceil(maxT / 5) * 5;
+    var y = lin(0, niceMax, H - m.b, m.t);
+    host.textContent = "";
+    var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, height: H, role: "img", "aria-label": "Flagship releases per year by lab" }, host);
+    var ax = svgEl("g", { "class": "ax" }, svg);
+    for (var v = 0; v <= niceMax; v += 5) {
+      svgEl("line", { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), "class": v === 0 ? "base" : "grid" }, ax);
+      var t = svgEl("text", { x: m.l - 8, y: y(v) + 4, "text-anchor": "end" }, ax); t.textContent = v;
+    }
+    var band = (W - m.l - m.r) / years.length;
+    var bw = Math.min(56, band * 0.62);
+    years.forEach(function (yr, i) {
+      var cx = m.l + band * i + band / 2;
+      var lbl = svgEl("text", { x: cx, y: H - m.b + 18, "text-anchor": "middle" }, ax);
+      lbl.textContent = yr === 2026 ? (band > 60 ? "2026 YTD" : "2026") : (band < 34 ? "'" + String(yr).slice(2) : String(yr));
+      var acc = 0;
+      var segs = order.filter(function (l) { return counts[yr][l.id] > 0; });
+      segs.forEach(function (l, si) {
+        var n = counts[yr][l.id];
+        var yTop = y(acc + n), yBot = y(acc);
+        var gapTop = si < segs.length - 1 ? 1 : 0, gapBot = si > 0 ? 1 : 0;
+        var hgt = Math.max(1, yBot - yTop - gapTop - gapBot);
+        var isTop = si === segs.length - 1;
+        var rr = Math.min(4, hgt / 2, bw / 2);
+        var x0 = cx - bw / 2, yT = yTop + gapTop;
+        var d = isTop
+          ? "M" + x0 + "," + (yT + hgt) + "V" + (yT + rr) + "Q" + x0 + "," + yT + " " + (x0 + rr) + "," + yT + "H" + (x0 + bw - rr) + "Q" + (x0 + bw) + "," + yT + " " + (x0 + bw) + "," + (yT + rr) + "V" + (yT + hgt) + "Z"
+          : "M" + x0 + "," + yT + "h" + bw + "v" + hgt + "h" + (-bw) + "Z";
+        var p = svgEl("path", { d: d, "class": "bar" }, svg);
+        p.style.fill = labColor(l.id);
+        var names = MODELS.filter(function (md) { return md.lab === l.id && new Date(md.t).getUTCFullYear() === yr; }).map(function (md) { return md.name; });
+        var build = function (tp) {
+          tp.appendChild(h("div", "t-title", String(yr) + (yr === 2026 ? " to date" : "")));
+          var row = h("div", "t-row");
+          var key = h("i", "key"); key.style.background = labColor(l.id);
+          row.appendChild(key); row.appendChild(h("b", null, String(n))); row.appendChild(h("span", null, l.name + (n === 1 ? " release" : " releases")));
+          tp.appendChild(row);
+          tp.appendChild(h("div", "t-sub", names.join(", ")));
+        };
+        p.addEventListener("pointerenter", function (e) { showTip(e, build); });
+        p.addEventListener("pointermove", moveTip);
+        p.addEventListener("pointerleave", hideTip);
+        acc += n;
+      });
+      if (totals[i] > 0) {
+        var tt = svgEl("text", { x: cx, y: y(totals[i]) - 7, "text-anchor": "middle", "class": "bar-total" }, svg);
+        tt.textContent = totals[i];
+      }
+    });
+    var get = function (yr) { var i = years.indexOf(yr); return i < 0 ? null : totals[i]; };
+    var a = get(2023), b2 = get(2025), c = get(2026);
+    if (a && b2) {
+      setHead("cadence-head", trim(b2 / a) + "× more releases", fmtInt(a) + " flagship releases in 2023, " + fmtInt(b2) + " in 2025" + (c != null ? ", and " + fmtInt(c) + " so far in 2026" : ""));
+    } else {
+      var sum = totals.reduce(function (s, n) { return s + n; }, 0);
+      setHead("cadence-head", fmtInt(sum) + " releases", "Across " + years[0] + "–" + years[years.length - 1] + " for the selected labs");
+    }
+    var leg = document.getElementById("cadence-legend");
+    leg.textContent = "";
+    order.forEach(function (l) {
+      var s = h("span");
+      var sw = h("i"); sw.style.cssText = "width:10px;height:10px;border-radius:2px;display:inline-block;background:" + labColor(l.id);
+      s.appendChild(sw); s.appendChild(document.createTextNode(l.name));
+      leg.appendChild(s);
+    });
+  }
+
+  /* ================= Legend for marks ================= */
+  function renderMarkLegend() {
+    var leg = document.getElementById("tl-legend");
+    leg.textContent = "";
+    LABS.filter(function (l) { return state.labs.has(l.id); }).forEach(function (l) {
+      var s = h("span"); s.appendChild(iconSvg(l.id)); s.appendChild(document.createTextNode(l.name)); leg.appendChild(s);
+    });
+    var rep = h("span");
+    rep.innerHTML = '<svg viewBox="-7 -7 14 14" aria-hidden="true"><circle r="4.6" fill="none" stroke="var(--fg-2)" stroke-width="1.6"/></svg>';
+    rep.appendChild(document.createTextNode("Hollow = reported, not yet confirmed by the lab"));
+    leg.appendChild(rep);
+  }
+
+  /* ================= Table ================= */
+  var COLS = [
+    { key: "name", label: "Model" },
+    { key: "lab", label: "Lab" },
+    { key: "t", label: "Released" },
+    { key: "ctx", label: "Context", r: true },
+    { key: "flop", label: "Compute (FLOP)", r: true },
+    { key: "gpqa", label: "GPQA Diamond", r: true },
+    { key: "swe", label: "SWE-bench V.", r: true }
+  ];
+  function renderTableHead() {
+    var tr = document.getElementById("tbl-head");
+    tr.textContent = "";
+    COLS.forEach(function (c) {
+      var th = h("th", c.r ? "r" : null);
+      th.scope = "col";
+      if (state.sort.key === c.key) th.setAttribute("aria-sort", state.sort.dir > 0 ? "ascending" : "descending");
+      var b = h("button"); b.type = "button"; b.id = "sort-" + c.key;
+      b.appendChild(document.createTextNode(c.label));
+      if (state.sort.key === c.key) b.appendChild(h("span", null, state.sort.dir > 0 ? "↑" : "↓"));
+      b.addEventListener("click", function () {
+        if (state.sort.key === c.key) state.sort.dir = -state.sort.dir;
+        else state.sort = { key: c.key, dir: c.key === "name" || c.key === "lab" ? 1 : -1 };
+        renderTableHead(); renderTable();
+      });
+      th.appendChild(b);
+      tr.appendChild(th);
+    });
+  }
+  function renderTable() {
+    var body = document.getElementById("tbl-body");
+    var q = state.q.trim().toLowerCase();
+    var rows = visible().filter(function (m) {
+      return !q || m.name.toLowerCase().indexOf(q) >= 0 || LAB[m.lab].name.toLowerCase().indexOf(q) >= 0 || LAB[m.lab].product.toLowerCase().indexOf(q) >= 0;
+    });
+    var k = state.sort.key, dir = state.sort.dir;
+    rows.sort(function (a, b) {
+      var av = k === "lab" ? LAB[a.lab].name : a[k], bv = k === "lab" ? LAB[b.lab].name : b[k];
+      if (av == null && bv == null) return b.t - a.t;
+      if (av == null) return 1;
+      if (bv == null) return -1;
+      if (typeof av === "string") return dir * av.localeCompare(bv);
+      return dir * (av - bv) || (b.t - a.t);
+    });
+    body.textContent = "";
+    var total = rows.length;
+    var limited = !state.showAll && !q && total > 12;
+    if (limited) {
+      var selIdx = rows.findIndex(function (m) { return m.id === state.selected; });
+      var shown = rows.slice(0, 12);
+      if (selIdx >= 12) shown.push(rows[selIdx]);
+      rows = shown;
+    }
+    var more = document.getElementById("tbl-more");
+    document.getElementById("tbl-more-wrap").hidden = q !== "" || total <= 12;
+    more.textContent = state.showAll ? "Show fewer" : "Show all " + total + " models";
+    rows.forEach(function (m) {
+      var tr = h("tr");
+      tr.setAttribute("aria-selected", m.id === state.selected ? "true" : "false");
+      var tdN = h("td", "model");
+      var nb = h("button", null, m.name); nb.type = "button";
+      nb.addEventListener("click", function (e) { e.stopPropagation(); select(m.id, true); });
+      tdN.appendChild(nb);
+      if (m.reported) tdN.appendChild(h("span", "rep", "reported"));
+      tr.appendChild(tdN);
+      var tdL = h("td"); tdL.appendChild(labTag(m.lab)); tr.appendChild(tdL);
+      tr.appendChild(h("td", null, fmtDate(m)));
+      [[m.ctx, fmtCtx], [m.flop, fmtFlop], [m.gpqa, fmtPct], [m.swe, fmtPct]].forEach(function (c) {
+        var td = h("td", "r");
+        if (c[0] == null) td.appendChild(h("span", "na", "—")); else td.textContent = c[1](c[0]);
+        tr.appendChild(td);
+      });
+      tr.addEventListener("click", function () { select(m.id, true); });
+      body.appendChild(tr);
+    });
+    document.getElementById("tbl-count").textContent = total + " of " + MODELS.length + " models";
+  }
+
+  /* ================= Hero stats (full dataset) ================= */
+  function renderStats() {
+    var host = document.getElementById("stats");
+    host.textContent = "";
+    var fitC = fitLog2(MODELS.filter(function (m) { return m.flop; }).map(function (m) { return { t: m.t, v: m.flop }; }));
+    var ctxs = MODELS.filter(function (m) { return m.ctx; });
+    var ctxMin = ctxs[0], ctxMax = ctxs.reduce(function (a, b) { return b.ctx > a.ctx ? b : a; });
+    var g = MODELS.filter(function (m) { return m.gpqa != null; });
+    var gFirst = g[0], gBest = g.reduce(function (a, b) { return b.gpqa > a.gpqa ? b : a; });
+    var count = function (yr) { return MODELS.filter(function (m) { return new Date(m.t).getUTCFullYear() === yr; }).length; };
+    var items = [
+      ["Compute doubling", doublingText(fitC).split(" ")[0], doublingText(fitC).split(" ")[1], "Training compute trend, " + MODELS.filter(function (m) { return m.flop; }).length + " models since GPT-1"],
+      ["Context growth", "×" + fmtInt(Math.round(ctxMax.ctx / ctxMin.ctx)), "", fmtCtx(ctxMin.ctx) + " tokens (" + ctxMin.name + ") to " + fmtCtx(ctxMax.ctx) + " (" + ctxMax.name + ")"],
+      ["GPQA Diamond best", trim(gBest.gpqa), "%", "Up from " + fmtPct(gFirst.gpqa) + " for " + gFirst.name + " in 2023"],
+      ["Releases in 2026", String(count(2026)), "so far", "Compared with " + count(2023) + " in all of 2023"]
+    ];
+    items.forEach(function (it) {
+      var s = h("div", "stat");
+      s.appendChild(h("div", "k", it[0]));
+      var v = h("div", "v", it[1]);
+      if (it[2]) v.appendChild(h("small", null, it[2]));
+      s.appendChild(v);
+      s.appendChild(h("div", "d", it[3]));
+      host.appendChild(s);
+    });
+    var last = MODELS[MODELS.length - 1];
+    document.getElementById("pill-text").textContent = MODELS.length + " releases tracked, latest " + last.name;
+  }
+
+  /* ================= Filters ================= */
+  function renderChips() {
+    var host = document.getElementById("lab-chips");
+    host.textContent = "";
+    LABS.forEach(function (l) {
+      var b = h("button", "chip"); b.type = "button"; b.id = "chip-" + l.id;
+      b.setAttribute("aria-pressed", state.labs.has(l.id) ? "true" : "false");
+      b.appendChild(iconSvg(l.id));
+      b.appendChild(document.createTextNode(l.name));
+      b.title = l.product;
+      b.addEventListener("click", function () {
+        if (state.labs.has(l.id)) { if (state.labs.size > 1) state.labs.delete(l.id); }
+        else state.labs.add(l.id);
+        renderChips(); refresh();
+      });
+      host.appendChild(b);
+    });
+    if (state.labs.size < LABS.length) {
+      var r = h("button", "chip reset", "Show all"); r.type = "button"; r.id = "chip-reset";
+      r.addEventListener("click", function () { LABS.forEach(function (l) { state.labs.add(l.id); }); renderChips(); refresh(); });
+      host.appendChild(r);
+    }
+  }
+  function bindSeg(id, attr, onPick) {
+    var seg = document.getElementById(id);
+    seg.addEventListener("click", function (e) {
+      var b = e.target.closest("button[" + attr + "]");
+      if (!b) return;
+      seg.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+      onPick(b.getAttribute(attr));
+    });
+  }
+
+  /* ================= Theme ================= */
+  var THEMES = ["system", "light", "dark"];
+  function applyTheme(t) {
+    var root = document.documentElement;
+    if (t === "system") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", t);
+    document.querySelectorAll("[data-theme-set]").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-theme-set") === t ? "true" : "false"); });
+    try { localStorage.setItem("fp-theme", t); } catch (e) { /* storage unavailable */ }
+  }
+  function currentTheme() { return document.documentElement.getAttribute("data-theme") || "system"; }
+  document.querySelectorAll("[data-theme-set]").forEach(function (b) {
+    b.addEventListener("click", function () { applyTheme(b.getAttribute("data-theme-set")); });
+  });
+  try { var saved = localStorage.getItem("fp-theme"); if (saved && THEMES.indexOf(saved) >= 0) applyTheme(saved); } catch (e) { /* ignore */ }
+
+  /* ================= Selection & refresh ================= */
+  function select(id, scrollToTimeline) {
+    state.selected = id;
+    renderTimeline(); renderDetail(); renderCompute(); renderContext(); renderBench();
+    renderTable();
+    if (scrollToTimeline) {
+      var r = document.getElementById("timeline").getBoundingClientRect();
+      if (r.top < 0 || r.top > window.innerHeight * 0.6) document.getElementById("timeline").scrollIntoView({ block: "start" });
+    }
+  }
+  function refresh() {
+    var vis = visible();
+    if (!vis.some(function (m) { return m.id === state.selected; }) && vis.length) state.selected = vis[vis.length - 1].id;
+    renderMarkLegend();
+    renderTimeline(); renderDetail(); renderCompute(); renderContext(); renderBench(); renderCadence(); renderTable();
+  }
+
+  bindSeg("range-seg", "data-range", function (v) { state.range = v; refresh(); });
+  bindSeg("bench-seg", "data-bench", function (v) { state.bench = v; renderBench(); });
+  document.getElementById("tbl-more").addEventListener("click", function () { state.showAll = !state.showAll; renderTable(); });
+  document.getElementById("q").addEventListener("input", function (e) { state.q = e.target.value; renderTable(); });
+
+  document.addEventListener("keydown", function (e) {
+    var tag = (e.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea" || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+    else if (e.key === "t" || e.key === "T") {
+      applyTheme(THEMES[(THEMES.indexOf(currentTheme()) + 1) % THEMES.length]);
+    }
+  });
+
+  var raf = 0;
+  function onResize() { cancelAnimationFrame(raf); raf = requestAnimationFrame(function () { renderTimeline(); renderCompute(); renderContext(); renderBench(); renderCadence(); }); }
+  if (window.ResizeObserver) {
+    var lastW = 0;
+    new ResizeObserver(function (entries) {
+      var w = entries[0].contentRect.width;
+      if (Math.abs(w - lastW) > 1) { lastW = w; onResize(); }
+    }).observe(document.querySelector("main"));
+  } else window.addEventListener("resize", onResize);
+  window.addEventListener("scroll", hideTip, { passive: true });
+
+  renderStats();
+  renderChips();
+  renderTableHead();
+  refresh();
+})();
+</script>
+</body>
+</html>
